@@ -114,6 +114,13 @@ if [ ! -z "${OVERWRITE_FROM}" ]; then
   echo "Setting configuration option OVERWRITE_FROM with value: ${OVERWRITE_FROM}"
 fi
 
+if [ ! -z "${OVERWRITE_TO}" ]; then
+  echo -e "/^To:.*$/ REPLACE To: $OVERWRITE_TO" > /etc/postfix/smtp_header_checks
+  postmap /etc/postfix/smtp_header_checks
+  postconf -e 'smtp_header_checks = regexp:/etc/postfix/smtp_header_checks'
+  echo "Setting configuration option OVERWRITE_TO with value: ${OVERWRITE_TO}"
+fi
+
 # Set message_size_limit
 if [ ! -z "${MESSAGE_SIZE_LIMIT}" ]; then
   postconf -e "message_size_limit = ${MESSAGE_SIZE_LIMIT}"
